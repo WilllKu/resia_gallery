@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-resiagallery-dev-c17f6-authRole",
+      "UnauthRoleArn": "arn:aws:iam::688567261220:role/amplify-resiagallery-dev-c17f6-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::688567261220:role/amplify-resiagallery-dev-c17f6-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-resiagallery-dev-c17f6-deployment",
+      "UnauthRoleName": "amplify-resiagallery-dev-c17f6-unauthRole",
+      "StackName": "amplify-resiagallery-dev-c17f6",
+      "StackId": "arn:aws:cloudformation:us-east-1:688567261220:stack/amplify-resiagallery-dev-c17f6/a5184b70-6742-11ef-880d-0e0ca44b21bf",
+      "AmplifyAppId": "dmvcep2iqle0f"
+    }
+  }
+}
