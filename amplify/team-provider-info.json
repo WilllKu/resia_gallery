@@ -10,6 +10,20 @@
       "StackName": "amplify-resiagallery-dev-c17f6",
       "StackId": "arn:aws:cloudformation:us-east-1:688567261220:stack/amplify-resiagallery-dev-c17f6/a5184b70-6742-11ef-880d-0e0ca44b21bf",
       "AmplifyAppId": "dmvcep2iqle0f"
+    },
+    "categories": {
+      "auth": {
+        "resiagallerye49a7ab8": {}
+      },
+      "function": {
+        "S3Triggerc31e5cf9": {
+          "deploymentBucketName": "amplify-resiagallery-dev-c17f6-deployment",
+          "s3Key": "amplify-builds/S3Triggerc31e5cf9-624e6d58302b36726247-build.zip"
+        }
+      },
+      "storage": {
+        "gallery": {}
+      }
     }
   }
 }

@@ -1,0 +1,18 @@
+{
+  "resourceName": "gallery",
+  "policyUUID": "081ae0d5",
+  "bucketName": "gallery-images",
+  "storageAccess": "authAndGuest",
+  "guestAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ],
+  "triggerFunction": "S3Triggerc31e5cf9",
+  "groupAccess": {}
+}
