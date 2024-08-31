@@ -1,34 +1,58 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useState, useEffect } from 'react'
 import './App.css'
 
+import UploadForm from './components/UploadPhoto';
+import Gallery from './components/Gallery';
+import { getUrl, list, remove } from '@aws-amplify/storage';
+
 function App() {
-  const [count, setCount] = useState(0)
+  const [images, setImages] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const fetchImages = async () => {
+    setLoading(true);
+    try {
+      const response = await list({ path: 'photos/' });
+      console.log(response)
+
+      if (response && response.items) {
+        const imageUrls = await Promise.all(
+          response.items.map(async item => {
+            const signedUrl = await getUrl( { path: item.path } );
+            return { key: item.path, url: signedUrl.url };
+          })
+        );
+        setImages(imageUrls);
+        console.log("Image URLs set:", imageUrls);
+      } else {
+        console.log("No items found in response");
+      }
+    } catch (error) {
+      console.error('Error retrieving images:', error);
+    }
+    setLoading(false);
+  };
+
+  const deleteImage = async (key) => {
+    try {
+      console.log(`photos/${key}`)
+      await remove( { path: key } );
+      console.log(`Image with key ${key} deleted`);
+      fetchImages();
+    } catch (error) {
+      console.error('Error removing image:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchImages();
+  }, []);
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div>
+      <UploadForm fetchImages={fetchImages}/>
+      <Gallery loading={loading} images={images} deleteImage={deleteImage}/>
+    </div>
   )
 }
 
