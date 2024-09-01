@@ -83,28 +83,33 @@ const UploadPhoto = ({ addImage }) => {
 
 const styles = {
   container: {
-    padding: '20px',
+    position: 'fixed',
+    top: '20px',
+    right: '20px',
+    width: '200px',
     border: '1px solid #ccc',
-    borderRadius: '5px',
+    borderRadius: '14px',
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center',
-    gap: '10px',
-    minHeight: '100px',  // Ensure there's enough space to drop files
-    justifyContent: 'center'  // Vertically center content
+    minHeight: '100px',
+    justifyContent: 'center'
   },
   input: {
     margin: '5px'
   },
   button: {
-    background: '#4CAF50',
+    background: '#44a0A9',
     color: 'white',
     padding: '8px 20px',
     border: 'none',
-    borderRadius: '5px',
+    borderRadius:  '14px',
     cursor: 'pointer',
     fontWeight: 'bold',
-    margin: '5px'
+    margin: '5px',
+    transition: 'background-color 0.3s ease', // Transition for background color
+    ':hover': {
+      background: '#45a049' // Slightly darker shade on hover
+    }
   }
 };
 

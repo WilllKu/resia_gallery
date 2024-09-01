@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 
-import UploadPhoto from './components/UploadPhoto';
-import Gallery from './components/Gallery';
+import UploadPhoto from './components/UploadPhoto/UploadPhoto';
+import Gallery from './components/Gallery/Gallery';
 import { getUrl, list, remove } from '@aws-amplify/storage';
 
 function App() {
