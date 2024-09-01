@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 
-import UploadForm from './components/UploadPhoto';
+import UploadPhoto from './components/UploadPhoto';
 import Gallery from './components/Gallery';
 import { getUrl, list, remove } from '@aws-amplify/storage';
 
@@ -13,8 +13,6 @@ function App() {
     setLoading(true);
     try {
       const response = await list({ path: 'photos/' });
-      console.log(response)
-
       if (response && response.items) {
         const imageUrls = await Promise.all(
           response.items.map(async item => {
@@ -35,13 +33,15 @@ function App() {
 
   const deleteImage = async (key) => {
     try {
-      console.log(`photos/${key}`)
       await remove( { path: key } );
-      console.log(`Image with key ${key} deleted`);
-      fetchImages();
+      setImages(prevImages => prevImages.filter(image => image.key !== key));
     } catch (error) {
       console.error('Error removing image:', error);
     }
+  };
+
+  const addImage = (newImage) => {
+    setImages(prevImages => [...prevImages, newImage]);
   };
 
   useEffect(() => {
@@ -50,7 +50,7 @@ function App() {
 
   return (
     <div>
-      <UploadForm fetchImages={fetchImages}/>
+      <UploadPhoto addImage={addImage}/>
       <Gallery loading={loading} images={images} deleteImage={deleteImage}/>
     </div>
   )
