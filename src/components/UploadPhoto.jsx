@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { uploadData } from '@aws-amplify/storage';
+import { uploadData, getUrl } from '@aws-amplify/storage';
 
-const UploadPhoto = ( { fetchImages={fetchImages} } ) => {
+const UploadPhoto = ({ addImage }) => {
   const [file, setFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -31,23 +31,25 @@ const UploadPhoto = ( { fetchImages={fetchImages} } ) => {
             path: `photos/${file.name}`,
             data: file,
         };
-        const result = await uploadData(uploadConfig);
-        console.log('Upload successful:', result);
+        await uploadData(uploadConfig);
+        const signedUrl = await getUrl({ path: uploadConfig.path });
+
+        const newImage = { key: uploadConfig.path, url: signedUrl.url };
+        addImage(newImage);
         alert('File uploaded successfully');
-        setFile(null); 
-        // setTimeout(fetchImages(), 10000);
+        setFile(null);
     } catch (error) {
         console.error('Error uploading file:', error);
         alert(`Error uploading file: ${error.message}`);
     } finally {
         setIsLoading(false);
     }
-};
+  };
 
   return (
     <div>
       <input type="file" onChange={handleChange} disabled={isLoading} />
-      <button onClick={uploadFile} disabled={isLoading}>
+      <button onClick={uploadFile} disabled={isLoading || !file}>
         {isLoading ? 'Uploading...' : 'Upload Image'}
       </button>
     </div>

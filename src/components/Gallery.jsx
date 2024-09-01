@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
-const Gallery = ( { images={images}, loading={loading}, deleteImage={deleteImage} } ) => {
-
+const Gallery = ({ images, loading, deleteImage }) => {
   return (
     <div>
       {loading ? <p>Loading images...</p> : images.map(image => (
