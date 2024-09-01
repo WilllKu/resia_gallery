@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { uploadData, getUrl } from '@aws-amplify/storage';
+import './UploadPhoto.css'; // Import the CSS file
 
 const UploadPhoto = ({ addImage }) => {
   const [files, setFiles] = useState([]);
@@ -39,7 +40,6 @@ const UploadPhoto = ({ addImage }) => {
         };
 
         await uploadData(uploadConfig);
-
         const signedUrl = await getUrl({ path: uploadConfig.path });
         return { key: uploadConfig.path, url: signedUrl.url };
       });
@@ -58,59 +58,13 @@ const UploadPhoto = ({ addImage }) => {
   };
 
   return (
-    <div 
-      style={styles.container} 
-      onDragOver={(e) => e.preventDefault()} 
-      onDrop={handleDrop}
-    >
-      <input
-        type="file"
-        multiple
-        onChange={handleChange}
-        disabled={isLoading}
-        style={styles.input}
-      />
-      <button
-        onClick={uploadFile}
-        disabled={isLoading || files.length === 0}
-        style={styles.button}
-      >
+    <div className="container" onDragOver={(e) => e.preventDefault()} onDrop={handleDrop}>
+      <input type="file" multiple onChange={handleChange} disabled={isLoading} className="input" />
+      <button onClick={uploadFile} disabled={isLoading || files.length === 0} className="button">
         {isLoading ? 'Uploading...' : 'Upload Images'}
       </button>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    position: 'fixed',
-    top: '20px',
-    right: '20px',
-    width: '200px',
-    border: '1px solid #ccc',
-    borderRadius: '14px',
-    display: 'flex',
-    flexDirection: 'column',
-    minHeight: '100px',
-    justifyContent: 'center'
-  },
-  input: {
-    margin: '5px'
-  },
-  button: {
-    background: '#44a0A9',
-    color: 'white',
-    padding: '8px 20px',
-    border: 'none',
-    borderRadius:  '14px',
-    cursor: 'pointer',
-    fontWeight: 'bold',
-    margin: '5px',
-    transition: 'background-color 0.3s ease', // Transition for background color
-    ':hover': {
-      background: '#45a049' // Slightly darker shade on hover
-    }
-  }
 };
 
 export default UploadPhoto;

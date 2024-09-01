@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './Gallery.css'; // Make sure the path is correct based on your file structure
 
 const Gallery = ({ images, loading, deleteImage }) => {
   const [selectedImages, setSelectedImages] = useState(new Set());
@@ -40,38 +41,21 @@ const Gallery = ({ images, loading, deleteImage }) => {
   return (
     <div>
       {loading ? <p>Loading images...</p> : (
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', justifyContent: 'center' }}>
+        <div className="gallery-container">
           {images.map(image => (
             <div key={image.key}
+                 className={`image-container ${selectedImages.has(image.key) ? 'selected' : ''}`}
                  draggable={selectedImages.size > 0}
                  onDragStart={handleDragStart}
-                 onClick={() => toggleImageSelection(image.key)}
-                 style={{
-                   width: '100px',
-                   height: '100px',
-                   cursor: 'pointer',
-                   border: selectedImages.has(image.key) ? '2px solid blue' : 'none'
-                 }}>
-              <img src={image.url} alt={image.key} style={{ width: '100%', height: '100%' }} />
+                 onClick={() => toggleImageSelection(image.key)}>
+              <img src={image.url} alt={image.key} className="image" />
             </div>
           ))}
         </div>
       )}
       <div onDrop={handleDrop}
            onDragOver={(e) => e.preventDefault()}
-           style={{
-             position: 'fixed',
-             bottom: '20px',
-             right: '20px',
-             width: '50px',
-             height: '50px',
-             backgroundColor: '#ccc',
-             borderRadius: '50%',
-             display: 'flex',
-             alignItems: 'center',
-             justifyContent: 'center',
-             border: '2px dashed black'
-           }}>
+           className="trash-bin">
         🗑️
       </div>
     </div>

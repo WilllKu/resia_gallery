@@ -1,0 +1,43 @@
+/* UploadPhoto.css */
+.container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 300px;
+    border: 1px solid #ccc;
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 120px;
+    justify-content: center;
+
+    gap: 10px;
+  }
+  
+  .input {
+    margin: 5px;
+    transform: translateX(3px);
+  }
+  
+  .button {
+    min-width: 150px;
+    min-height: 50px;
+
+    padding: 4px 0px 4px 2px;
+    border-radius: 6px; 
+    cursor: pointer;
+    font-size: 12px; 
+    font-weight: 700;
+    height: 24px;
+    background-color: rgb(5, 19, 85);
+    color: white;
+    transition: background-color 0.3s ease-in-out;
+    border: none; 
+    outline: none;
+}
+  
+  .button:hover {
+    background-color: rgb(17, 29, 89);
+    box-shadow: 0 2px 4px rgba(78, 78, 78, 0.15); 
+  }
