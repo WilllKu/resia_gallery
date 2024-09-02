@@ -3,6 +3,8 @@
     grid-template-rows: repeat(auto-fit, minmax(200px, 1fr));
     gap: 10px;
     justify-content: center;
+    user-select: none;
+
 }
 
 .image-container {
@@ -36,7 +38,7 @@
 }
 
 .image-container.selected::before {
-    opacity: 1; /* Fully visible tint on selection */
+    opacity: 1; 
 }
 
 .image {
@@ -80,13 +82,31 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+    background-color: rgba(0, 0, 0, 0.5); 
   }
   
   .rename-input {
     margin-bottom: 10px;
   }
-  
+
   .rename-button {
-    padding: 5px 10px;
+    min-width: 100px;
+    min-height: 35px;
+
+    padding: 4px 0px 4px 2px;
+    border-radius: 6px; 
+    cursor: pointer;
+    font-size: 12px; 
+    font-weight: 700;
+    height: 24px;
+    background-color: rgb(5, 19, 85);
+    color: white;
+    transition: background-color 0.3s ease-in-out;
+    border: none; 
+    outline: none;
+}
+  
+  .rename-button:hover {
+    background-color: rgb(17, 29, 89);
+    box-shadow: 0 2px 4px rgba(78, 78, 78, 0.15); 
   }

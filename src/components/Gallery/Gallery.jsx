@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import './Gallery.css'; // Ensure the CSS is correctly linked
+import './Gallery.css';
 
 const Gallery = ({ images, loading, deleteImage, renameImage }) => {
   const [renameData, setRenameData] = useState({ key: '', newName: '', isRenaming: false });
   const [selectedImages, setSelectedImages] = useState(new Set());
 
   const toggleImageSelection = (key) => {
+    if (renameData.isRenaming) return;
+
     const newSelectedImages = new Set(selectedImages);
     if (newSelectedImages.has(key)) {
       newSelectedImages.delete(key);
@@ -17,10 +19,8 @@ const Gallery = ({ images, loading, deleteImage, renameImage }) => {
 
   const handleDoubleClick = (image) => {
     if (renameData.isRenaming && renameData.key === image.key) {
-      // If currently renaming the same image, disable renaming mode
       setRenameData({ key: '', newName: '', isRenaming: false });
     } else {
-      // Enable renaming mode for the clicked image
       setRenameData({ key: image.key, newName: '', isRenaming: true });
     }
   };
@@ -36,6 +36,11 @@ const Gallery = ({ images, loading, deleteImage, renameImage }) => {
       if (success) {
         alert('Image renamed successfully');
         setRenameData({ key: '', newName: '', isRenaming: false });
+        setSelectedImages(prev => {
+          const updated = new Set(prev);
+          updated.delete(renameData.key);
+          return updated;
+        });
       } else {
         alert('Failed to rename image');
       }
@@ -45,11 +50,13 @@ const Gallery = ({ images, loading, deleteImage, renameImage }) => {
   };
 
   const handleDragStart = (e) => {
+    if (renameData.isRenaming) return;
+
     const keys = Array.from(selectedImages);
     console.log("Dragging:", keys);
     e.dataTransfer.setData("text/plain", JSON.stringify(keys));
 
-    var img = document.createElement('img'); // Using a placeholder image for the drag
+    var img = document.createElement('img');
     img.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E";
     e.dataTransfer.setDragImage(img, 0, 0);
   };
@@ -62,7 +69,7 @@ const Gallery = ({ images, loading, deleteImage, renameImage }) => {
       for (const key of keys) {
         await deleteImage(key);
       }
-      setSelectedImages(new Set()); // Clear selection after deleting
+      setSelectedImages(new Set());
     } catch (error) {
       console.error('Error removing images:', error);
     }

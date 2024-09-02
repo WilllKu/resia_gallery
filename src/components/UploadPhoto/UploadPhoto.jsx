@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { uploadData, getUrl } from '@aws-amplify/storage';
-import './UploadPhoto.css'; // Import the CSS file
+import './UploadPhoto.css';
 
 const UploadPhoto = ({ addImage }) => {
   const [files, setFiles] = useState([]);
