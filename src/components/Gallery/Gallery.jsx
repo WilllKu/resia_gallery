@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import './Gallery.css'; // Make sure the path is correct based on your file structure
+import './Gallery.css'; // Ensure the CSS is correctly linked
 
-const Gallery = ({ images, loading, deleteImage }) => {
+const Gallery = ({ images, loading, deleteImage, renameImage }) => {
+  const [renameData, setRenameData] = useState({ key: '', newName: '', isRenaming: false });
   const [selectedImages, setSelectedImages] = useState(new Set());
 
   const toggleImageSelection = (key) => {
@@ -12,6 +13,35 @@ const Gallery = ({ images, loading, deleteImage }) => {
       newSelectedImages.add(key);
     }
     setSelectedImages(newSelectedImages);
+  };
+
+  const handleDoubleClick = (image) => {
+    if (renameData.isRenaming && renameData.key === image.key) {
+      // If currently renaming the same image, disable renaming mode
+      setRenameData({ key: '', newName: '', isRenaming: false });
+    } else {
+      // Enable renaming mode for the clicked image
+      setRenameData({ key: image.key, newName: '', isRenaming: true });
+    }
+  };
+
+  const handleNameChange = (event) => {
+    setRenameData(prev => ({ ...prev, newName: event.target.value }));
+  };
+
+  const submitRename = async () => {
+    if (renameData.newName && renameData.key) {
+      const newKey = `photos/${renameData.newName}`;
+      const success = await renameImage(renameData.key, newKey);
+      if (success) {
+        alert('Image renamed successfully');
+        setRenameData({ key: '', newName: '', isRenaming: false });
+      } else {
+        alert('Failed to rename image');
+      }
+    } else {
+      alert('Please enter a valid name');
+    }
   };
 
   const handleDragStart = (e) => {
@@ -44,18 +74,23 @@ const Gallery = ({ images, loading, deleteImage }) => {
         <div className="gallery-container">
           {images.map(image => (
             <div key={image.key}
-                 className={`image-container ${selectedImages.has(image.key) ? 'selected' : ''}`}
-                 draggable={selectedImages.size > 0}
+                 className={`image-container ${selectedImages.has(image.key) ? 'selected' : ''} ${renameData.key === image.key && renameData.isRenaming ? 'renaming' : ''}`}
+                 draggable={selectedImages.size > 0 && !renameData.isRenaming}
                  onDragStart={handleDragStart}
+                 onDoubleClick={() => handleDoubleClick(image)}
                  onClick={() => toggleImageSelection(image.key)}>
               <img src={image.url} alt={image.key} className="image" />
+              {renameData.key === image.key && renameData.isRenaming && (
+                <div className="rename-overlay">
+                  <input type="text" value={renameData.newName} onChange={handleNameChange} placeholder="Enter new name" className="rename-input"/>
+                  <button onClick={submitRename} className="rename-button">Rename</button>
+                </div>
+              )}
             </div>
           ))}
         </div>
       )}
-      <div onDrop={handleDrop}
-           onDragOver={(e) => e.preventDefault()}
-           className="trash-bin">
+      <div onDrop={handleDrop} onDragOver={(e) => e.preventDefault()} className="trash-bin">
         🗑️
       </div>
     </div>

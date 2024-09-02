@@ -3,7 +3,7 @@ import './App.css'
 
 import UploadPhoto from './components/UploadPhoto/UploadPhoto';
 import Gallery from './components/Gallery/Gallery';
-import { getUrl, list, remove } from '@aws-amplify/storage';
+import { copy, getUrl, list, remove } from '@aws-amplify/storage';
 
 function App() {
   const [images, setImages] = useState([]);
@@ -40,6 +40,25 @@ function App() {
     }
   };
 
+  const renameImage = async (oldKey, newKey) => {
+    try {
+      await copy({
+        source: {
+          path: oldKey,
+        },
+        destination: {
+          path: newKey,
+        },
+      });
+      await remove({ path: oldKey });
+      setImages(prevImages => prevImages.map(image => image.key === oldKey ? {...image, key: newKey} : image));
+      return true;
+    } catch (error) {
+      console.error('Error renaming image:', error);
+      return false;
+    }
+  };
+
   const addImage = (newImage) => {
     setImages(prevImages => [...prevImages, newImage]);
   };
@@ -51,7 +70,7 @@ function App() {
   return (
     <div>
       <UploadPhoto addImage={addImage}/>
-      <Gallery loading={loading} images={images} deleteImage={deleteImage}/>
+      <Gallery loading={loading} images={images} deleteImage={deleteImage} renameImage={renameImage}/>
     </div>
   )
 }
