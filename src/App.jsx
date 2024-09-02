@@ -51,7 +51,12 @@ function App() {
         },
       });
       await remove({ path: oldKey });
-      setImages(prevImages => prevImages.map(image => image.key === oldKey ? {...image, key: newKey} : image));
+      const signedUrl = await getUrl({ path: newKey });
+      setImages(prevImages =>
+        prevImages.map(image =>
+          image.key === oldKey ? { key: newKey, url: signedUrl.url } : image
+        )
+      );
       return true;
     } catch (error) {
       console.error('Error renaming image:', error);
